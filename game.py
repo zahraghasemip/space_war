@@ -1,10 +1,16 @@
 import pygame
 import random
 import math
+from pygame import mixer
 pygame.init()
 
 #wallpaper
 wallpaper = pygame.image.load('./files/background-wallpaper.jpg')
+
+#background music
+mixer.music.load('./files/background.mp3')
+mixer.music.play(-1)
+
 #main game
 screen = pygame.display.set_mode((600,957))
 
@@ -92,6 +98,8 @@ while running:
                     bulletX = playerX
                     bullet_state = "fire"
                     fire_bullet(bulletX,bulletY)
+                    fire_sound = mixer.Sound('./files/laser.wav')
+                    fire_sound.play()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.type == pygame.K_LEFT:
@@ -111,10 +119,10 @@ while running:
     for i in range(num_of_enemies):
         enemyX[i] += enemyX_change[i]
         if enemyX[i] <= 0 :
-            enemyX_change[i] = 0.2
+            enemyX_change[i] = 0.1
             enemyY[i] += enemyY_change[i] 
         elif enemyX[i] >= 536 :
-            enemyX_change[i] = -0.2
+            enemyX_change[i] = -0.1
             enemyY[i] += enemyY_change[i]
         #bullet collision
         collision = isCollision(enemyX[i], enemyY[i] , bulletX , bulletY)
@@ -124,7 +132,11 @@ while running:
             score_value += 1
             enemyX[i] = random.randint(100, 400)
             enemyY[i] = random.randint(50,150)
+            collision_sound = mixer.Sound('./files/explosion.wav')
+            collision_sound.play()
+
         enemy(enemyX[i],enemyY[i],i)
+        
 
     #bullet movement
     if bullet_state is "fire":
