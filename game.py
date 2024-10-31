@@ -67,6 +67,12 @@ def show_score(x,y):
     score = font.render("score " + str(score_value),True , (255,255,255))
     screen.blit(score , (x,y))
 
+#show gameover text
+def game_over_text():
+    game_over_font = pygame.font.Font('./files/Vazirmatn-Black.ttf', 40)
+    game_over_txt = game_over_font.render("GAME OVER" , True , (255,255,255))
+    screen.blit(game_over_txt , (200,400))
+
 def fire_bullet(x,y):
     screen.blit(bulletImg,(x+10,y+20))
 
@@ -117,12 +123,19 @@ while running:
 
     #enemy movement
     for i in range(num_of_enemies):
+        #gameover
+        if enemyY[i] > 200:
+            for j in range(num_of_enemies):
+                enemyY[j] = 2000
+            game_over_text()
+            break
+
         enemyX[i] += enemyX_change[i]
         if enemyX[i] <= 0 :
-            enemyX_change[i] = 0.1
+            enemyX_change[i] = 0.4
             enemyY[i] += enemyY_change[i] 
         elif enemyX[i] >= 536 :
-            enemyX_change[i] = -0.1
+            enemyX_change[i] = -0.4
             enemyY[i] += enemyY_change[i]
         #bullet collision
         collision = isCollision(enemyX[i], enemyY[i] , bulletX , bulletY)
